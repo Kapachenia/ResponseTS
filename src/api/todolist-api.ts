@@ -26,13 +26,13 @@ export const todolistAPI = {
         return instance.get<getTasksResponseType>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(title: string, todolistId: string) {
-        return instance.post<createTaskType>(`todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<CommonType<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks`, {title})
     },
     deleteTask(todolistId: string, taskId: string) {
-        return instance.delete<deleteTaskType>(`todo-lists/${todolistId}/tasks/${taskId}`)
+        return instance.delete<CommonType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, title: string) {
-        return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, {title})
+        return instance.put<CommonType<{item: TaskType}>>(`todo-lists/${todolistId}/tasks/${taskId}`, {title})
     }
 }
 
@@ -45,8 +45,8 @@ type getTodoType = {
 
 type CommonType<T = {}> = {
     resultCode: number
-    messages: Array<string>,
-    fieldsErrors: Array<string>,
+    messages: Array<string>
+    fieldsErrors: Array<string>
     data: T
 }
 
@@ -61,6 +61,15 @@ type TaskType = {
     status: number
     title: string
     todoListId: string
+}
+
+type UpdateTaskType = {
+    title: string
+    description: string
+    status: number
+    priority: number
+    startDate: string
+    deadline: string
     // completed: boolean
 }
 
@@ -68,20 +77,4 @@ type getTasksResponseType = {
     error: null | string
     totalCount: number
     items: Array<TaskType>
-}
-
-type createTaskType = {
-    // data: TaskType
-    // fieldsErrors: any
-    // messages: any
-    resultCode: number
-    messages: any
-    data: {}
-}
-
-type deleteTaskType = {
-    data: {}
-    fieldsErrors: Array<string>
-    messages: Array<string>
-    resultCode: number
 }
